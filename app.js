@@ -1,14 +1,20 @@
 const inquirer = require('inquirer');
-// const fs = require('fs');
-// const generatePage = require('./src/page-template');
+const fs = require('fs');
+const generatePage = require('./src/page-template');
 
-// const pageHTML = generatePage(name, github);
-
-// fs.writeFile('./index.html', pageHTML, err => {
-//   if (err) throw err;
-
-//   console.log('Portfolio complete! Check out index.html to see the output!');
-// });
+// create the about section
+const generateAbout = aboutText => {
+    if (!aboutText) {
+      return '';
+    }
+  
+    return `
+      <section class="my-3" id="about">
+        <h2 class="text-dark bg-primary p-2 display-inline-block">About Me</h2>
+        <p>${aboutText}</p>
+      </section>
+    `;
+  };
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -139,8 +145,18 @@ const promptProject = portfolioData => {
     });
 };
 
+  
+
 promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        console.log(portfolioData);
-    });
+.then(promptProject)
+.then(portfolioData => {
+  //const pageHTML = generatePage(portfolioData);
+  //const pageHTML = generatePage(mockData);
+
+   fs.writeFile('./index.html', pageHTML, err => {
+     if (err) throw new Error(err);
+   }
+
+   )}
+
+)
