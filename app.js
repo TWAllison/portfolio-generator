@@ -1,20 +1,6 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
 const generatePage = require('./src/page-template');
-
-// create the about section
-const generateAbout = aboutText => {
-    if (!aboutText) {
-      return '';
-    }
-  
-    return `
-      <section class="my-3" id="about">
-        <h2 class="text-dark bg-primary p-2 display-inline-block">About Me</h2>
-        <p>${aboutText}</p>
-      </section>
-    `;
-  };
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -145,18 +131,23 @@ const promptProject = portfolioData => {
     });
 };
 
-  
-
 promptUser()
 .then(promptProject)
 .then(portfolioData => {
-  //const pageHTML = generatePage(portfolioData);
-  //const pageHTML = generatePage(mockData);
-
-   fs.writeFile('./index.html', pageHTML, err => {
-     if (err) throw new Error(err);
-   }
-
-   )}
-
-)
+  return generatePage(portfolioData);
+})
+.then(pageHTML => {
+  return writeFile(pageHTML);
+})
+.then(writeFileResponse => {
+  console.log(writeFileResponse);
+  return copyFile();
+})
+.then(copyFileResponse => {
+  console.log(copyFileResponse);
+})
+.catch(err => {
+  console.log(err);
+});
+      
+  
